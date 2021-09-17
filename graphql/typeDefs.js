@@ -20,6 +20,7 @@ module.exports = gql`
         firstName:String
         createdAt:String
         countLike:Int
+        commentLikes: Int
     }
 
     type Post {
@@ -44,7 +45,7 @@ module.exports = gql`
         dummy:String
         getPost:[Post]
         getPopularPost:[Post]
-        getComment( postId:String ):[Comment]
+        getComment( postId:String , skip: Int, limit:Int ):[Comment]
     }
 
     type Mutation {
@@ -69,7 +70,7 @@ module.exports = gql`
         createComment(
             body:String
             postId:String
-        ):String
+        ):Comment
         
         createLike(id:String):String
     }
