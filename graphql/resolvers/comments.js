@@ -9,7 +9,7 @@ const Comment = require('../../models/Comment')
 
 module.exports = {
     Query: {
-        async getComment( _, { postId , skip , limit }){
+        async getComment( _, { postId , skip = 0 , limit = 1 }){
             const comment = await Comment.aggregate([ 
                 {
                     $match: { post: mongoose.Types.ObjectId(postId) }

@@ -55,8 +55,8 @@ module.exports = {
                                 $sort:{
                                     'createdAt': -1
                                 }
-                            },
-                            { $limit: 1 } 
+                            }
+                            
                         ],
                         as: 'comments'
                     }
