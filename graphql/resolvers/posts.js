@@ -26,14 +26,6 @@ module.exports = {
                 },
                 {
                     $lookup:{
-                        from:'comments',
-                        localField:'_id',
-                        foreignField:'post',
-                        as:'comments'
-                    }
-                },
-                {
-                    $lookup:{
                         from:'likes',
                         localField:'_id',
                         foreignField:'post',
@@ -68,13 +60,9 @@ module.exports = {
                         "image": 1,
                         "createdAt": 1,
                         "firstName": 1,
-                        "comment":["$comments"],
                         "countComment": { $size : { $ifNull: ["$comments", [] ] } },
                         "countLike": { $size : {$ifNull : ["$likesCount", []]} }
                     }
-                },
-                {
-                    $unwind: "$comment"
                 }
             ]).sort({createdAt: -1}).limit(10)
         
