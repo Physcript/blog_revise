@@ -4,9 +4,12 @@ const bcrypt = require('bcrypt')
 const { findOne } = require('../models/User')
 const { UserInputError } = require('apollo-server-express')
 
+const auth = require('./auth')
+
 const User = require('../models/User')
 const Post = require('../models/Post')
 const Comment = require('../models/Comment')
+const mongoose  = require('mongoose')
 
 module.exports.create_user_validation = async (email,password,confirmPassword,firstName,lastName) => {
     const errors = {}
@@ -94,4 +97,26 @@ module.exports.like_validation = async (id) => {
         valid: Object.keys(errors).length < 1,
     }
 
+}
+module.exports.update_post_validation = async (postId, context, body ) => {
+
+    const errors = {}
+
+    console.log(body)
+
+    const post = await Post.findOne( { _id:postId, user : mongoose.Types.ObjectId(context)   } )
+
+    { !post ? (
+        errors.title = 'UnAuthorized'
+    ) : '' }
+
+    if(body.trim() == ''){
+        errors.message = "Message is required"
+    }
+    
+    return {
+        errors,
+        valid : Object.keys(errors).length < 1
+    }
+    
 }

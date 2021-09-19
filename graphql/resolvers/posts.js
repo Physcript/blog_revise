@@ -2,6 +2,7 @@
 
 const auth = require('../../utils/auth')
 const mongoose = require('mongoose')
+const {update_post_validation} = require('../../utils/validation')
 
 const Post = require('../../models/Post')
 
@@ -90,6 +91,29 @@ module.exports = {
             await post.save()
                 
             return 'asd'
+            }catch(e){
+                return e
+            }
+        },
+        async updatePost( _,{postId , body} , context) {
+            const user = await auth(context)
+
+            try{
+                const { errors , valid } = await update_post_validation(postId,user._id,body)
+                
+                if( !valid ) {
+                    throw new UserInputError('Errors', {
+                        errors
+                    })
+                }
+
+                const filter = { _id: mongoose.Types.ObjectId(postId) }
+                const update = { body: body }
+
+                let post = await Post.findOneAndUpdate(filter, update)
+                
+                return "updated"
+
             }catch(e){
                 return e
             }

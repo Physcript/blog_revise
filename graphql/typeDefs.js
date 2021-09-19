@@ -72,7 +72,9 @@ module.exports = gql`
             postId:String
         ):Comment
         
-        createLike(id:String):Int
+        createLike(id:String):Int,
+
+        updatePost(postId:String,body:String):String
     }
 
 `
