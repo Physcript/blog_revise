@@ -32,6 +32,7 @@ module.exports = gql`
         comment: [Comment]
         countComment: Int
         countLike: Int
+        user:String
     }
 
     type Like {
@@ -46,6 +47,7 @@ module.exports = gql`
         getPost:[Post]
         getPopularPost:[Post]
         getComment( postId:String , skip: Int, limit:Int ):[Comment]
+        checkAction(postId:String):Boolean
     }
 
     type Mutation {

@@ -11,8 +11,17 @@ const {UserInputError} = require('apollo-server-express')
 
 module.exports = {
     Query : {
-        async getPopularPost(){
-            //
+        async checkAction( _,{postId},context ){
+            try{
+                const user = await auth(context)
+                const post = await Post.findOne( {_id: postId, user: mongoose.Types.ObjectId(user._id) } )
+                    if(!post){
+                       return false
+                    }
+                return true
+            }catch(e){
+                console.log(e)
+            }
         },
         async getPost(){
             const post = await Post.aggregate([
@@ -22,7 +31,8 @@ module.exports = {
                         "body": "$body",
                         "image": "$image",
                         "createdAt": "$createdAt",
-                        "firstName": "$firstName"
+                        "firstName": "$firstName",
+                        "user": "$user"
                     },
                 },
                 {
@@ -35,6 +45,7 @@ module.exports = {
                 },
                 {
                     $lookup:{
+
                         from:'comments',
                         let: {
                             "postId": '$_id'
@@ -61,6 +72,7 @@ module.exports = {
                         "image": 1,
                         "createdAt": 1,
                         "firstName": 1,
+                        "user":1,
                         "countComment": { $size : { $ifNull: ["$comments", [] ] } },
                         "countLike": { $size : {$ifNull : ["$likesCount", []]} }
                     }
