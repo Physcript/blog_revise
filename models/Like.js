@@ -13,7 +13,7 @@ const likeSchema = mongoose.Schema({
     },
     comment:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'comment'
+        ref:'Comment'
     }
 })
 

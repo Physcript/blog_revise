@@ -120,3 +120,9 @@ module.exports.update_post_validation = async (postId, context, body ) => {
     }
     
 }
+
+module.exports.delete_post_validation = (postId) => {
+    const erros = {}
+
+
+}

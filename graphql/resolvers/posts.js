@@ -5,6 +5,8 @@ const mongoose = require('mongoose')
 const {update_post_validation} = require('../../utils/validation')
 
 const Post = require('../../models/Post')
+const Comment = require('../../models/Comment')
+const Like = require('../../models/Like')
 
 const {UserInputError} = require('apollo-server-express')
 
@@ -129,6 +131,26 @@ module.exports = {
             }catch(e){
                 return e
             }
-        } 
+        },
+        async deletePost( _,{postId},context ){
+            
+            try{
+                const user = await auth(context)
+                const post = await Post.findOneAndDelete({ _id : postId , user: user._id })
+                console.log('done delete psot')
+                if(!post){
+                    return "Invalid action"
+                }   
+                console.log('done delete psot 2')
+                const comment = await Comment.deleteMany( { post : mongoose.Types.ObjectId(postId) } )
+                const like = await Like.deleteMany( { post: mongoose.Types.ObjectId(postId) } )
+                const like2 = await Like.deleteMany( { comment: mongoose.Types.ObjectId(postId) } )
+
+
+                return "Post Deleted "
+            }catch(e){
+                return 'Invalid action'
+            }
+        }
     }
 }
