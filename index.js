@@ -22,7 +22,8 @@ const Server = async (typeDefs,resolvers) => {
     await server.start()
 
     server.applyMiddleware({
-        app
+        app,
+        path : "/"
     })
 
     const PORT = process.env.PORT || 5000
