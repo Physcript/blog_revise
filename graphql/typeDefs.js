@@ -21,7 +21,9 @@ module.exports = gql`
         createdAt:String
         countLike:Int
         commentLikes: Int
+        count:Int
     }
+
 
     type Post {
         _id:ID
@@ -43,6 +45,7 @@ module.exports = gql`
     }
 
     type Query {
+        
         dummy:String
         getPost:[Post]
         getPopularPost:[Post]
@@ -51,7 +54,10 @@ module.exports = gql`
     }
 
     type Mutation {
-        
+        getCommentCount(postId:String):Int
+
+        getProfile(id:String):User
+
         createUser(
             email:String
             password:String

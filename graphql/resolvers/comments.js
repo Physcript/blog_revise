@@ -77,6 +77,14 @@ module.exports = {
             }catch(e){
                return e
             }
+        },
+        async getCommentCount( _,{postId},context ){
+            const user = await auth(context)
+            
+            const count = await Comment.find({ post: mongoose.Types.ObjectId(postId) })
+            
+            return ( count.length )
+
         }
     }
 }

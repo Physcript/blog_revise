@@ -1,13 +1,29 @@
 
 require('dotenv').config()
 const {create_user_validation , login_validation} = require ('../../utils/validation')
+const mongoose = require('mongoose')
 const {UserInputError} = require('apollo-server-express')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const User = require('../../models/User')
+const auth = require('../../utils/auth')
 
 module.exports = {
     Mutation: {
+
+        async getProfile(_,{id},context){
+            const user = await auth(context)
+            try {  
+                const myUser = await User.findById(mongoose.Types.ObjectId(id))
+                console.log(myUser)
+                if(!myUser){
+                    throw new Error
+                }
+                return myUser
+            }catch(e){
+                return e
+            }
+        },
         async login(_,{email,password}){
             try {
                 const user = await login_validation(email.toLowerCase(),password)

@@ -12,7 +12,9 @@ const {UserInputError} = require('apollo-server-express')
 
 
 module.exports = {
+
     Query : {
+        
         async checkAction( _,{postId},context ){
             try{
                 const user = await auth(context)
